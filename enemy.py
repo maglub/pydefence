@@ -7,9 +7,7 @@ from tower import Tower
 
 
 class Enemy:
-    def __init__(self, path, health = 30, range = 80, name = "noname enemy", enemy_image = "sprites/enemy.png", own_speed=2 ):
-        print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-        print(path)
+    def __init__(self, path, health = 30, range = 80, name = "noname enemy", enemy_image = "sprites/enemy.png", own_speed=2 , enemy_size=(40,40)):
         self.path = path
         self.x, self.y = self.path[0]
         self.path_index = 0
@@ -23,7 +21,8 @@ class Enemy:
         self.cooldown_rate = 5
         self.name = name
         self.enemy_image = pygame.image.load(enemy_image)
-        self.enemy_image = pygame.transform.scale(self.enemy_image, (40, 40))  # Resize the image if necessary
+        self.enemy_size_x, self.enemy_size_y = enemy_size
+        self.enemy_image = pygame.transform.scale(self.enemy_image, (self.enemy_size_x, self.enemy_size_y))  # Resize the image if necessary
 
 
     def in_range(self, enemy):
@@ -32,11 +31,13 @@ class Enemy:
 
     def draw(self, surface):
         pygame.draw.circle(surface, BLUE, (self.x, self.y), self.range, 1)
-        surface.blit(self.enemy_image, (self.x - 20, self.y - 20))
+        surface.blit(self.enemy_image, (self.x - (self.enemy_size_x/2), self.y - (self.enemy_size_y/2) ))
         health_text = font.render("h: " + str(self.health), True, BLACK)
         range_text = font.render("r: " + str(self.range), True, BLACK)
-        surface.blit(health_text, (self.x + 25, self.y - 20))
-        surface.blit(range_text, (self.x + 25, self.y))
+
+        #--- enemy
+        surface.blit(health_text, (self.x + (self.enemy_size_x/2), self.y - (self.enemy_size_y/2)))
+        surface.blit(range_text, (self.x + (self.enemy_size_x + 5), self.y))
 
         for projectile in self.projectiles:
             projectile.draw(surface)
@@ -107,3 +108,7 @@ class EnemyTank(Enemy):
 class Mario(Enemy):
     def __init__(self, path, health=5, range=80, name="noname enemy", enemy_image="sprites/mario.png", own_speed=4):
         super().__init__(path, health, range, name, enemy_image, own_speed)
+
+class Beast(Enemy):
+    def __init__(self, path, health=50, range=50, name="noname enemy", enemy_image="sprites/beast.png", own_speed=1, enemy_size=(100,100)):
+        super().__init__(path, health, range, name, enemy_image, own_speed, enemy_size)

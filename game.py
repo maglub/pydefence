@@ -102,7 +102,7 @@ def run_wave(wave):
         if game_frame % 100 == 0:
             game_round += 1
             if total_enemies < waves[wave]['num_enemies']:
-                enemy_class = random.choice([Mario, EnemyTank])
+                enemy_class = random.choice([Mario, EnemyTank, Beast])
                 enemies.append(enemy_class(waves[wave]["path"], int(0 + min(10 * game_round, 200)), 30 + random.randint(0, 100)))
                 total_enemies += 1
 
